@@ -2,7 +2,7 @@
 
 namespace GraphQLExample.Subscriptions.Messages
 {
-    public sealed record PayloadMessage<T> : UntypedPayloadMessage where T : notnull
+    public sealed record PayloadMessage<T> : PayloadMessageBase where T : notnull
     {
         public T Payload { get; init; }
 

@@ -2,6 +2,8 @@
 {
     public interface ISubscriptionTransport
     {
-        void Publish(object message);
+        void Publish<T>(T message);
+
+        IDisposable Subscribe(Action<object> message);
     }
 }

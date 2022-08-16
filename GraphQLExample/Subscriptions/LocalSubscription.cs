@@ -1,29 +1,28 @@
 ﻿namespace GraphQLExample.Subscriptions
 {
-    internal sealed class Subscription<T> : ISubscription<T>, IUntypedSubscription, IDisposable
+    internal sealed class LocalSubscription<TMessage, TSubscription> : ILocalSubscription<TMessage>, IUntypedLocalSubscription, IDisposable
+        where TSubscription : ISubscription
     {
         private readonly SubscriptionService subscriptionService;
-        private readonly Func<T, bool> filter;
-        private IObserver<T>? currentObserver;
+        private readonly ISubscription subscription;
+        private IObserver<TMessage>? currentObserver;
 
         public Guid Id { get; } = Guid.NewGuid();
 
-        public Dictionary<string, string> Context { get; }
-
-        public Subscription(SubscriptionService subscriptionService, Dictionary<string, string> context)
+        public LocalSubscription(SubscriptionService subscriptionService, TSubscription subscription)
         {
             this.subscriptionService = subscriptionService;
-            this.Context = context;
+            this.subscription = subscription;
         }
 
-        private void SubscribeCore(IObserver<T> observer)
+        private void SubscribeCore(IObserver<TMessage> observer)
         {
             if (currentObserver == null)
             {
                 throw new InvalidOperationException("Can only have one observer.");
             }
 
-            subscriptionService.SubscribeCore(this);
+            subscriptionService.SubscribeCore(Id, this, subscription);
 
             currentObserver = observer;
         }
@@ -40,7 +39,7 @@
             currentObserver = null;
         }
 
-        public IDisposable Subscribe(IObserver<T> observer)
+        public IDisposable Subscribe(IObserver<TMessage> observer)
         {
             SubscribeCore(observer);
 
@@ -55,9 +54,9 @@
             }
         }
 
-        public void OnNext(object value)
+        public void OnNext(object? value)
         {
-            if (value is T typed && filter(typed))
+            if (value is TMessage typed)
             {
                 currentObserver?.OnNext(typed);
             }

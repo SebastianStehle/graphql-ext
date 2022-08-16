@@ -1,6 +1,6 @@
 ﻿namespace GraphQLExample.Subscriptions
 {
-    public interface ISubscription<T> : IObservable<T>
+    public interface ILocalSubscription<T> : IObservable<T>
     {
     }
 }
