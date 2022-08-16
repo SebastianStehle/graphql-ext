@@ -1,9 +1,17 @@
-﻿namespace GraphQLExample.Subscriptions
+﻿using GraphQLExample.Subscriptions.Messages;
+
+namespace GraphQLExample.Subscriptions
 {
     public interface ISubscriptionTransport
     {
-        void Publish<T>(T message);
+        void Publish<TPayload>(PayloadMessage<TPayload> message) where TPayload : notnull;
 
-        IDisposable Subscribe(Action<object> onMessage);
+        void Publish<TSubscription>(SubscribeMessage<TSubscription> message) where TSubscription : ISubscription;
+
+        void Publish(SubscriptionsAliveMessage message);
+
+        void Publish(UnsubscribeMessage message);
+
+        IDisposable Subscribe(Action<MessageBase> onMessage);
     }
 }
