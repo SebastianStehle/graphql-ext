@@ -27,7 +27,7 @@ namespace GraphQLExample.Subscriptions
             clusterSubscriptions[id] = subscription;
         }
 
-        public void OnRemoved(Guid id)
+        public void OnRemoved(Guid id, ISubscription subscription)
         {
             clusterSubscriptions.TryRemove(id, out _);
         }

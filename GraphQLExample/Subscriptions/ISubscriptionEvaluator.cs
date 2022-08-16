@@ -6,6 +6,6 @@
 
         void OnAdded(Guid id, ISubscription subscription);
 
-        void OnRemoved(Guid id);
+        void OnRemoved(Guid id, ISubscription subscription);
     }
 }

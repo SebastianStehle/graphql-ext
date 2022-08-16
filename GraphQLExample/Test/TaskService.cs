@@ -18,7 +18,7 @@ namespace GraphQLExample.Test
 
             subscriptions.PublishAsync(new TaskAdded
             {
-                TaskItem = taskItem
+                Task = taskItem
             });
         }
 

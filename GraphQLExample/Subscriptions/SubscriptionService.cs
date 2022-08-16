@@ -212,10 +212,13 @@ namespace GraphQLExample.Subscriptions
 
         private void RemoveClusterSubscription(Guid id)
         {
-            clusterSubscriptions.TryRemove(id, out _);
+            if (!clusterSubscriptions.TryRemove(id, out var entry))
+            {
+                return;
+            }
 
             // The evaluator maintains a custom list to optimize the data structure for faster evaluation.
-            evaluator.OnRemoved(id);
+            evaluator.OnRemoved(id, entry.Subscription);
         }
 
         private DateTime GetNextExpiration()

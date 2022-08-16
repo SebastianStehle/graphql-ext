@@ -25,6 +25,9 @@ builder.Services.TryAddSingleton<ISubscriptionTransport,
 
 builder.Services.AddSingleton<TaskService>();
 
+builder.Services.AddSingleton<ISubscriptionEvaluator,
+    TaskSubscriptionEvaluator>();
+
 builder.Services.AddGraphQL(builder =>
 {
     builder.AddAutoSchema<TestQuery>(s => s
