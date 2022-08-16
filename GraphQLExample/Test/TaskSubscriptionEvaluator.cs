@@ -24,7 +24,19 @@ namespace GraphQLExample.Test
                 return Enumerable.Empty<Guid>();
             }
 
-            return taskSubscriptions.Where(x => taskAdded.Task.Priority >= x.Value.Priority).Select(x => x.Key).ToList();
+            return taskSubscriptions.Where(x => ShouldMatch(x.Value, taskAdded)).Select(x => x.Key).ToList();
+        }
+
+        private static bool ShouldMatch(TaskSubscription subscription, TaskAdded taskAdded)
+        {
+            var match = taskAdded.Task.Priority >= subscription.Priority;
+
+            if (match && !string.IsNullOrWhiteSpace(subscription.Text))
+            {
+                match = taskAdded.Task.Text?.Contains(subscription.Text) == true;
+            }
+
+            return match;
         }
 
         public void OnAdded(Guid id, ISubscription subscription)

@@ -52,7 +52,7 @@ namespace GraphQLExample.Subscriptions
 
         public void Cleanup()
         {
-            if (localSubscriptions.Count > 0)
+            if (!localSubscriptions.IsEmpty)
             {
                 // Only publish a message if there is at least one subscription.
                 transport.Publish(new SubscriptionsAliveMessage
@@ -62,7 +62,7 @@ namespace GraphQLExample.Subscriptions
                 });
             }
 
-            if (clusterSubscriptions.Count > 0)
+            if (!clusterSubscriptions.IsEmpty)
             {
                 var now = Clock.UtcNow;
 

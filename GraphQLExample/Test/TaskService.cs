@@ -4,7 +4,7 @@ namespace GraphQLExample.Test
 {
     public class TaskService
     {
-        private readonly List<TaskItem> tasksItems = new List<TaskItem>();
+        private readonly List<TaskItem> tasksItems = new();
         private readonly ISubscriptionService subscriptions;
 
         public TaskService(ISubscriptionService subscriptions)

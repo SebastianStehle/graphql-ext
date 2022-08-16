@@ -2,7 +2,7 @@
 {
     public sealed class InMemoryTransport : ISubscriptionTransport
     {
-        private readonly List<Action<object>> handlers = new List<Action<object>>();
+        private readonly List<Action<object>> handlers = new();
 
         public void Publish<T>(T message)
         {

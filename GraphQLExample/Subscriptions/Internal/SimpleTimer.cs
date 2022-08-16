@@ -1,10 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace GraphQLExample.Subscriptions.Internal
+﻿namespace GraphQLExample.Subscriptions.Internal
 {
     internal sealed class SimpleTimer : IAsyncDisposable
     {
-        private readonly CancellationTokenSource stopToken = new CancellationTokenSource();
+        private readonly CancellationTokenSource stopToken = new();
 
         public bool IsDisposed => stopToken.IsCancellationRequested;
 
