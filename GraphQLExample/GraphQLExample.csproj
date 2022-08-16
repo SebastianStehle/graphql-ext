@@ -6,4 +6,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GraphQL.Server.All" Version="7.0.0" />
+    <PackageReference Include="GraphQL.Server.Ui.Playground" Version="7.0.0" />
+  </ItemGroup>
+
 </Project>

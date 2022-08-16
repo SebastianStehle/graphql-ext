@@ -17,7 +17,7 @@
 
         private void SubscribeCore(IObserver<TMessage> observer)
         {
-            if (currentObserver == null)
+            if (currentObserver != null)
             {
                 throw new InvalidOperationException("Can only have one observer.");
             }
@@ -34,7 +34,7 @@
                 return;
             }
 
-            subscriptionService.UnsubscribeCore(this);
+            subscriptionService.UnsubscribeCore(Id);
 
             currentObserver = null;
         }

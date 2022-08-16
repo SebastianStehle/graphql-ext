@@ -4,6 +4,6 @@
     {
         void Publish<T>(T message);
 
-        IDisposable Subscribe(Action<object> message);
+        IDisposable Subscribe(Action<object> onMessage);
     }
 }

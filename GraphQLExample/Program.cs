@@ -1,21 +1,50 @@
+using GraphQL;
+using GraphQL.DI;
+using GraphQL.Server.Ui.Playground;
+using GraphQLExample.Schema;
+using GraphQLExample.Subscriptions;
+using GraphQLExample.Test;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddSingleton<IConfigureExecution,
+    Configure>();
+
+builder.Services.AddSingleton<ISubscriptionService,
+    SubscriptionService>();
+
+builder.Services.TryAddSingleton<ISubscriptionEvaluator,
+    DefaultSubscriptionEvaluator>();
+
+builder.Services.TryAddSingleton<ISubscriptionSenderProvider,
+    HostnameSubscriptionSenderProvider>();
+
+builder.Services.TryAddSingleton<ISubscriptionTransport,
+    InMemoryTransport>();
+
+builder.Services.AddSingleton<TaskService>();
+
+builder.Services.AddGraphQL(builder =>
+{
+    builder.AddAutoSchema<TestQuery>(s => s
+        .WithMutation<TestMutations>()
+        .WithSubscription<TestSubscriptions>());
+
+    builder.AddSystemTextJson();
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+app.UseDeveloperExceptionPage();
+app.UseWebSockets();
+
+app.UseGraphQL("/graphql");
+
+app.UseGraphQLPlayground("/", new PlaygroundOptions
 {
-    app.UseExceptionHandler("/Error");
-}
-app.UseStaticFiles();
+    GraphQLEndPoint = "/graphql",
+    SubscriptionsEndPoint = "/graphql",
+});
 
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapRazorPages();
-
-app.Run();
+await app.RunAsync();
